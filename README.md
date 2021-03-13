@@ -74,7 +74,7 @@ See all examples [in the test suite](https://github.com/galvez/jsontypedef/blob/
 
 Fastify uses `ajv` for validation and serialization, but only supports JSON Schema. Although `ajv` itself [already supports JSON Type Definition](https://github.com/ajv-validator/ajv/blob/master/docs/json-type-definition.md), it might take a while for the support to come to Fastify.
 
-That is not a problem because we can easily transplate JTD schemas to JSON Schema, with the exception of [`discriminator`](https://tools.ietf.org/html/rfc8927#section-2.2.8) which isn't well supported in JSON Schema.
+That is not a problem because we can easily translate JTD schemas to JSON Schema, with the exception of [`discriminator`](https://tools.ietf.org/html/rfc8927#section-2.2.8) which isn't well supported in JSON Schema.
 
 This library offers the `schema` helper, which offers all methods from the main API but will output JSON Schema compatible schemas. So you can use it with Fastify:
 
