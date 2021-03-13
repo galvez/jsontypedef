@@ -67,3 +67,31 @@ See all examples [in the test suite](https://github.com/galvez/jsontypedef/blob/
 - `array(type, nullable, metadata)`
 - `object(props, optional, additional, nullable)`
 - `match(field, mapping, nullable, metadata)`
+
+## JSON Schema compatibility
+
+[JSON Type Definition](https://jsontypedef.com/) is a subset of [JSON Schema](https://json-schema.org/). There are no data constraints, so you can't say a string is supposed to have a length of 5, you can only say a string is a string. For most projects, that might just be what you need.
+
+Fastify uses `ajv` for validation and serialization, but only supports JSON Schema. Although `ajv` itself [already supports JSON Type Definition](https://github.com/ajv-validator/ajv/blob/master/docs/json-type-definition.md), it might take a while for the support to come to Fastify.
+
+That is not a problem because we can easily transplate JTD schemas to JSON Schema, with the exception of [`discriminator`](https://tools.ietf.org/html/rfc8927#section-2.2.8) which isn't well supported in JSON Schema.
+
+This library offers the `schema` helper, which offers all methods from the main API but will output JSON Schema compatible schemas. So you can use it with Fastify:
+
+```js
+const fastify = require('fastify')()
+const { schema: { object, string } } = require('../index')
+
+const schema = {
+  headers: object({
+    'x-foo': string()
+  }),
+}
+
+fastify.post('/the/url', { schema }, (req, reply) => {
+  reply.send('ok')
+})
+```
+
+See the [example/](https://github.com/galvez/jsontypedef/tree/main/example) folder.
+

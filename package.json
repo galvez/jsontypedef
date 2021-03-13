@@ -11,6 +11,7 @@
   "description": "Helper functions to define RFC 8927 types",
   "files": [
     "index.js",
+    "example",
     "README.md"
   ],
   "homepage": "https://github.com/galvez/jsontypedef",
@@ -21,7 +22,7 @@
     "type": "git",
     "url": "git+https://github.com/galvez/jsontypedef.git"
   },
-  "version": "0.0.1-alpha",
+  "version": "0.0.1",
   "devDependencies": {
     "eslint": "^7.22.0",
     "eslint-config-standard": "^16.0.2",
