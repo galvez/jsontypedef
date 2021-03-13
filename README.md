@@ -17,6 +17,35 @@ npm install jsontypedef
 
 ## Example
 
+Write:
+
+```js
+object({
+  propertyA: string(),
+  propertyB: object({
+    innerPropertyC: float64(),
+  })
+})
+```
+
+Get:
+
+```js
+{
+  properties: {
+    propertyA: { type: 'string' },
+    propertyB: {
+      properties: {
+        innerPropertyC: { type: 'float64' }
+      }
+    }
+  }
+}
+```
+
+Saves you a good deal of typing maintaining big type definitions.
+
+See all examples [in the test suite](https://github.com/galvez/jsontypedef/blob/main/test.js).
 
 ## API
 
