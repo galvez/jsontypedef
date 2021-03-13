@@ -20,12 +20,14 @@ npm install jsontypedef
 Write:
 
 ```js
-object({
+const { string, float64, object } = require('jsontypedef')
+
+console.log(object({
   propertyA: string(),
   propertyB: object({
     innerPropertyC: float64(),
   })
-})
+}))
 ```
 
 Get:
