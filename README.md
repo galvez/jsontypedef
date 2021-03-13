@@ -80,7 +80,7 @@ This library offers the `schema` helper, which offers all methods from the main 
 
 ```js
 const fastify = require('fastify')()
-const { schema: { object, string } } = require('../index')
+const { schema: { object, string } } = require('jsontypedef')
 
 const schema = {
   headers: object({
