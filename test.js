@@ -8,6 +8,7 @@ const {
   boolean,
   string,
   timestamp,
+  number,
   float32,
   float64,
   int8,
@@ -25,9 +26,17 @@ const {
 // Test regular JSON Type Definition output
 tap.strictSame(empty(), {})
 tap.strictSame(boolean(), { type: 'boolean' })
+tap.strictSame(boolean(true, { title: 'flag' }), {
+  type: 'boolean',
+  nullable: true,
+  metadata: {
+    title: 'flag'
+  }
+})
 tap.strictSame(string(), { type: 'string' })
 tap.strictSame(timestamp(), { type: 'timestamp' })
 tap.strictSame(float32(), { type: 'float32' })
+tap.strictSame(number(), { type: 'float64' })
 tap.strictSame(float64(), { type: 'float64' })
 tap.strictSame(int8(), { type: 'int8' })
 tap.strictSame(uint8(), { type: 'uint8' })
@@ -77,8 +86,10 @@ tap.strictSame(schema.empty(), {})
 tap.strictSame(schema.boolean(), { type: 'boolean' })
 tap.strictSame(schema.string(), { type: 'string' })
 tap.strictSame(schema.timestamp(), { type: 'string', format: 'date-time' })
+tap.strictSame(schema.number(), { type: 'number' })
 tap.strictSame(schema.float32(), { type: 'number' })
 tap.strictSame(schema.float64(), { type: 'number' })
+tap.strictSame(schema.integer(), { type: 'integer' })
 tap.strictSame(schema.int8(), { type: 'integer' })
 tap.strictSame(schema.uint8(), { type: 'integer' })
 tap.strictSame(schema.int16(), { type: 'integer' })
@@ -98,6 +109,8 @@ tap.strictSame(schema.object({
   propertyB: schema.object({
     innerPropertyC: schema.float64()
   })
+}, {
+  optionalProperty: schema.number()
 }), {
   type: 'object',
   properties: {
@@ -107,8 +120,9 @@ tap.strictSame(schema.object({
       properties: {
         innerPropertyC: { type: 'number' }
       },
-      required: ['innerPropertyC'],
-    }
+      required: ['innerPropertyC']
+    },
+    optionalProperty: { type: 'number' }
   },
-  required: ['propertyA', 'propertyB'],
+  required: ['propertyA', 'propertyB']
 })

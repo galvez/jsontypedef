@@ -19,6 +19,11 @@ const jsontypedef = {
     ...nullable && { nullable },
     ...metadata && { metadata }
   }),
+  number: (nullable, metadata) => ({
+    type: 'float64',
+    ...nullable && { nullable },
+    ...metadata && { metadata }
+  }),
   float32: (nullable, metadata) => ({
     type: 'float32',
     ...nullable && { nullable },
@@ -101,12 +106,21 @@ jsontypedef.schema = {
     format: 'date-time',
     ...metadata
   }),
+  number: (nullable, metadata = {}) => ({
+    type: getNullable(nullable, 'number'),
+    ...metadata
+  }),
   float32: (nullable, metadata = {}) => ({
     type: getNullable(nullable, 'number'),
     ...metadata
   }),
   float64: (nullable, metadata = {}) => ({
     type: getNullable(nullable, 'number'),
+    ...metadata
+  }),
+  // Added for convenience
+  integer: (nullable, metadata = {}) => ({
+    type: getNullable(nullable, 'integer'),
     ...metadata
   }),
   int8: (nullable, metadata = {}) => ({
@@ -145,7 +159,7 @@ jsontypedef.schema = {
   }),
   object: (props, optional, additional, nullable, metadata) => ({
     type: getNullable(nullable, 'object'),
-    properties: assign(props, optional),
+    properties: assign({}, props, optional),
     required: keys(props),
     ...additional && { additionalProperties: additional },
     ...metadata

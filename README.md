@@ -20,12 +20,12 @@ npm install jsontypedef
 Write:
 
 ```js
-const { string, float64, object } = require('jsontypedef')
+const { string, number, object } = require('jsontypedef')
 
 console.log(object({
   propertyA: string(),
   propertyB: object({
-    innerPropertyC: float64(),
+    innerPropertyC: number(),
   })
 }))
 ```
@@ -55,6 +55,7 @@ See all examples [in the test suite](https://github.com/galvez/jsontypedef/blob/
 - `boolean(nullable, metadata)`
 - `string(nullable, metadata)`
 - `timestamp(nullable, metadata)`
+- `number(nullable, metadata)` # alias to float64()
 - `float32(nullable, metadata)`
 - `float64(nullable, metadata)`
 - `int8(nullable, metadata)`
@@ -70,7 +71,9 @@ See all examples [in the test suite](https://github.com/galvez/jsontypedef/blob/
 
 ## JSON Schema compatibility
 
-[JSON Type Definition](https://jsontypedef.com/) is a subset of [JSON Schema](https://json-schema.org/). There are no data constraints, so you can't say a string is supposed to have a length of 5, you can only say a string is a string. For most projects, that might just be what you need.
+[JSON Type Definition](https://jsontypedef.com/) is a subset of [JSON Schema](https://json-schema.org/). There are no data constraints, so you can't say a string is supposed to have a length of 5, you can only say a string is a string. 
+
+For most projects, that might just be what you need.
 
 Fastify uses `ajv` for validation and serialization, but only supports JSON Schema. Although `ajv` itself [already supports JSON Type Definition](https://github.com/ajv-validator/ajv/blob/master/docs/json-type-definition.md), it might take a while for the support to come to Fastify.
 
@@ -92,6 +95,8 @@ fastify.post('/the/url', { schema }, (req, reply) => {
   reply.send('ok')
 })
 ```
+
+The `schema` helper also includes `number()` and `integer()` for convenience.
 
 See the [example/](https://github.com/galvez/jsontypedef/tree/main/example) folder.
 
