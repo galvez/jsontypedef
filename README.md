@@ -71,7 +71,7 @@ See all examples [in the test suite](https://github.com/galvez/jsontypedef/blob/
 
 ## JSON Schema compatibility
 
-[JSON Type Definition](https://jsontypedef.com/) is a subset of [JSON Schema](https://json-schema.org/). There are no data constraints, so you can't say a string is supposed to have a length of 5, you can only say a string is a string. 
+Functionality-wise, [JSON Type Definition](https://jsontypedef.com/) is a subset of [JSON Schema](https://json-schema.org/). There are no data constraints, so you can't say a string is supposed to have a length of 5, you can only say a string is a string. 
 
 For most projects, that might just be what you need.
 
