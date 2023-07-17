@@ -73,10 +73,10 @@ describe('JSON Schema support', () => {
           properties: {
             innerPropertyC: { type: 'number' }
           },
-          required: ['innerPropertyC'],
-        },
+          required: ['innerPropertyC']
+        }
       },
-      required: ['propertyA', 'propertyB'],
+      required: ['propertyA', 'propertyB']
     })
   })
 
@@ -101,7 +101,7 @@ describe('JSON Schema support', () => {
           properties: {
             innerPropertyC: { type: 'number' }
           },
-          required: ['innerPropertyC'],
+          required: ['innerPropertyC']
         },
         propertyC: { type: 'string' }
       },
@@ -129,7 +129,7 @@ describe('JSON Schema support', () => {
           properties: {
             innerPropertyC: { type: 'number' }
           },
-          required: ['innerPropertyC'],
+          required: ['innerPropertyC']
         }
       }
     })
@@ -152,7 +152,7 @@ describe('JSON Schema support', () => {
           properties: {
             innerPropertyC: { type: 'number' }
           },
-          required: ['innerPropertyC'],
+          required: ['innerPropertyC']
         }
       }
     })

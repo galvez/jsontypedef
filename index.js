@@ -2,7 +2,7 @@
 
 const jsontypedef = {
   empty: (metadata) => ({
-    ...metadata && { metadata },
+    ...metadata && { metadata }
   }),
   boolean: (metadata) => ({
     type: 'boolean',
@@ -170,13 +170,13 @@ const jsontypedef = {
       ...props && { properties: props },
       ...optional && { optionalProperties: optional },
       ...metadata && { metadata }
-    }),
+    })
   }
 }
 
 jsontypedef.schema = {
   empty: (metadata) => ({
-    ...metadata && { metadata },
+    ...metadata && { metadata }
   }),
   boolean: (metadata) => ({
     type: 'boolean',
@@ -350,7 +350,7 @@ jsontypedef.schema = {
         ...requiredKeys.length && { required: requiredKeys },
         ...metadata && { metadata }
       }
-    },
+    }
   }
 }
 
