@@ -1,7 +1,7 @@
 {
   "scripts": {
     "lint": "eslint . --ext js --fix",
-    "test": "tap test.js"
+    "test": "vitest run --bail 1"
   },
   "bugs": {
     "url": "https://github.com/galvez/jsontypedef/issues"
