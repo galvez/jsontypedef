@@ -1,8 +1,0 @@
-{
-  "name": "example",
-  "private": true,
-  "dependencies": {
-    "fastify": "^3.14.0",
-    "jsontypedef": "0.0.1"
-  }
-}
