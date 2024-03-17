@@ -1,6 +1,5 @@
-import { describe, it, expect } from 'vitest'
-
-const { schema } = require('../index.js')
+import { describe, expect, it } from 'vitest'
+import schema from '../jsonschema.js'
 
 // Test JSON Schema output (JTD-compatible subset)
 
@@ -14,8 +13,8 @@ describe('JSON Schema support', () => {
     expect(schema.boolean({ title: 'flag' })).toEqual({
       type: 'boolean',
       metadata: {
-        title: 'flag'
-      }
+        title: 'flag',
+      },
     })
   })
 
@@ -24,8 +23,8 @@ describe('JSON Schema support', () => {
     expect(schema.string({ info: 'Information' })).toEqual({
       type: 'string',
       metadata: {
-        info: 'Information'
-      }
+        info: 'Information',
+      },
     })
   })
 
@@ -49,20 +48,28 @@ describe('JSON Schema support', () => {
   })
 
   it('should create enum types', () => {
-    expect(schema.values(['A', 'B', 'C'])).toEqual({ type: 'string', enum: ['A', 'B', 'C'] })
+    expect(schema.values(['A', 'B', 'C'])).toEqual({
+      type: 'string',
+      enum: ['A', 'B', 'C'],
+    })
   })
 
   it('should create elements form (arrays)', () => {
-    expect(schema.array(schema.string())).toEqual({ type: 'array', items: { type: 'string' } })
+    expect(schema.array(schema.string())).toEqual({
+      type: 'array',
+      items: { type: 'string' },
+    })
   })
 
   it('should create properties form (objects)', () => {
-    expect(schema.object({
-      propertyA: schema.string(),
-      propertyB: schema.object({
-        innerPropertyC: schema.float64()
-      })
-    })).toEqual({
+    expect(
+      schema.object({
+        propertyA: schema.string(),
+        propertyB: schema.object({
+          innerPropertyC: schema.float64(),
+        }),
+      }),
+    ).toEqual({
       additionalProperties: true,
       type: 'object',
       properties: {
@@ -71,26 +78,32 @@ describe('JSON Schema support', () => {
           type: 'object',
           additionalProperties: true,
           properties: {
-            innerPropertyC: { type: 'number' }
+            innerPropertyC: { type: 'number' },
           },
-          required: ['innerPropertyC']
-        }
+          required: ['innerPropertyC'],
+        },
       },
-      required: ['propertyA', 'propertyB']
+      required: ['propertyA', 'propertyB'],
     })
   })
 
   it('should create optional properties', () => {
-    expect(schema.object({
-      propertyA: schema.string(),
-      propertyB: schema.object({
-        innerPropertyC: schema.float64()
-      })
-    }, {
-      propertyC: { type: 'string' }
-    }, {
-      metadataProperty: 'metatada'
-    })).toEqual({
+    expect(
+      schema.object(
+        {
+          propertyA: schema.string(),
+          propertyB: schema.object({
+            innerPropertyC: schema.float64(),
+          }),
+        },
+        {
+          propertyC: { type: 'string' },
+        },
+        {
+          metadataProperty: 'metatada',
+        },
+      ),
+    ).toEqual({
       type: 'object',
       additionalProperties: true,
       properties: {
@@ -99,26 +112,28 @@ describe('JSON Schema support', () => {
           type: 'object',
           additionalProperties: true,
           properties: {
-            innerPropertyC: { type: 'number' }
+            innerPropertyC: { type: 'number' },
           },
-          required: ['innerPropertyC']
+          required: ['innerPropertyC'],
         },
-        propertyC: { type: 'string' }
+        propertyC: { type: 'string' },
       },
       required: ['propertyA', 'propertyB'],
       metadata: {
-        metadataProperty: 'metatada'
-      }
+        metadataProperty: 'metatada',
+      },
     })
   })
 
   it('should not create required properties when there are none', () => {
-    expect(schema.object(null, {
-      propertyA: schema.string(),
-      propertyB: schema.object({
-        innerPropertyC: schema.float64()
-      })
-    })).toEqual({
+    expect(
+      schema.object(null, {
+        propertyA: schema.string(),
+        propertyB: schema.object({
+          innerPropertyC: schema.float64(),
+        }),
+      }),
+    ).toEqual({
       type: 'object',
       additionalProperties: true,
       properties: {
@@ -127,21 +142,23 @@ describe('JSON Schema support', () => {
           type: 'object',
           additionalProperties: true,
           properties: {
-            innerPropertyC: { type: 'number' }
+            innerPropertyC: { type: 'number' },
           },
-          required: ['innerPropertyC']
-        }
-      }
+          required: ['innerPropertyC'],
+        },
+      },
     })
   })
 
   it('should create objects with no allowed additional properties', () => {
-    expect(schema.sealed(null, {
-      propertyA: schema.string(),
-      propertyB: schema.object({
-        innerPropertyC: schema.float64()
-      })
-    })).toEqual({
+    expect(
+      schema.sealed(null, {
+        propertyA: schema.string(),
+        propertyB: schema.object({
+          innerPropertyC: schema.float64(),
+        }),
+      }),
+    ).toEqual({
       type: 'object',
       additionalProperties: false,
       properties: {
@@ -150,11 +167,11 @@ describe('JSON Schema support', () => {
           type: 'object',
           additionalProperties: true,
           properties: {
-            innerPropertyC: { type: 'number' }
+            innerPropertyC: { type: 'number' },
           },
-          required: ['innerPropertyC']
-        }
-      }
+          required: ['innerPropertyC'],
+        },
+      },
     })
   })
 })

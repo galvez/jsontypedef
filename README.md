@@ -20,7 +20,7 @@ npm install jsontypedef
 Write:
 
 ```js
-const { string, number, object } = require('jsontypedef')
+import { string, number, object } from 'jsontypedef'
 
 console.log(object({
   propertyA: string(),
@@ -113,13 +113,11 @@ Functionality-wise, [JSON Type Definition](https://jsontypedef.com/) is a subset
 
 Fastify uses `ajv` for validation and serialization, but only supports JSON Schema out of the box, although its `addSchema()` method could be reworked to recognize JTD in the future. Although `ajv` itself [already supports JSON Type Definition](https://github.com/ajv-validator/ajv/blob/master/docs/json-type-definition.md), it might take a while for the support to come to Fastify.
 
-That is not a problem because we can easily translate JTD schemas to JSON Schema with the `schema` helper provided by this library:
-
-This library offers the `schema` helper, which offers all methods from the main API but will output JSON Schema compatible schemas. So you can use it with Fastify:
+That is not a problem because we can easily translate JTD schemas to JSON Schema with the `jsonschema` submodule provided by this library. which offers all methods from the main API but will output JSON Schema compatible schemas. So you can use it with Fastify:
 
 ```js
-const fastify = require('fastify')()
-const { schema: { object, string } } = require('jsontypedef')
+import Fastify from 'fastify'
+import { object, string } from 'jsontypedef/jsonschema'
 
 const schema = {
   headers: object({
@@ -132,7 +130,7 @@ fastify.post('/the/url', { schema }, (req, reply) => {
 })
 ```
 
-The `schema` helper also includes `number()` and `integer()` for convenience.
+The `jsonschema` submodule also includes `number()` and `integer()` for convenience.
 
 See the [**full test suite**](https://github.com/galvez/jsontypedef/tree/main/test) for more usage examples.
 

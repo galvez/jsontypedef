@@ -1,11 +1,11 @@
-import { describe, it, expect } from 'vitest'
+import { describe, expect, it } from 'vitest'
 
-const {
+import {
   // Nullable Types
   nullable,
   // Regular Types
-  object // Object with additional properties allowed
-} = require('../index.js')
+  object, // Object with additional properties allowed
+} from '../index.js'
 
 // Test regular JSON Type Definition output
 describe('RFC 8927 support (nullable helper)', () => {
@@ -15,8 +15,8 @@ describe('RFC 8927 support (nullable helper)', () => {
       type: 'boolean',
       nullable: true,
       metadata: {
-        title: 'flag'
-      }
+        title: 'flag',
+      },
     })
   })
 
@@ -26,8 +26,8 @@ describe('RFC 8927 support (nullable helper)', () => {
       type: 'string',
       nullable: true,
       metadata: {
-        info: 'Information'
-      }
+        info: 'Information',
+      },
     })
   })
 
@@ -53,24 +53,26 @@ describe('RFC 8927 support (nullable helper)', () => {
   it('should create nullable enum types', () => {
     expect(nullable.values(['A', 'B', 'C'])).toEqual({
       enum: ['A', 'B', 'C'],
-      nullable: true
+      nullable: true,
     })
   })
 
   it('should create nullable elements form (arrays)', () => {
     expect(nullable.array(nullable.string())).toEqual({
       elements: { type: 'string', nullable: true },
-      nullable: true
+      nullable: true,
     })
   })
 
   it('should create nullable properties form (objects)', () => {
-    expect(nullable.object({
-      propertyA: nullable.string(),
-      propertyB: object({
-        innerPropertyC: nullable.float64()
-      })
-    })).toEqual({
+    expect(
+      nullable.object({
+        propertyA: nullable.string(),
+        propertyB: object({
+          innerPropertyC: nullable.float64(),
+        }),
+      }),
+    ).toEqual({
       nullable: true,
       additionalProperties: true,
       properties: {
@@ -78,24 +80,30 @@ describe('RFC 8927 support (nullable helper)', () => {
         propertyB: {
           additionalProperties: true,
           properties: {
-            innerPropertyC: { type: 'float64', nullable: true }
-          }
-        }
-      }
+            innerPropertyC: { type: 'float64', nullable: true },
+          },
+        },
+      },
     })
   })
 
   it('should create nullable optional properties', () => {
-    expect(nullable.object({
-      propertyA: nullable.string(),
-      propertyB: object({
-        innerPropertyC: nullable.float64()
-      })
-    }, {
-      propertyC: nullable.string()
-    }, {
-      metadataProperty: 'metatada'
-    })).toEqual({
+    expect(
+      nullable.object(
+        {
+          propertyA: nullable.string(),
+          propertyB: object({
+            innerPropertyC: nullable.float64(),
+          }),
+        },
+        {
+          propertyC: nullable.string(),
+        },
+        {
+          metadataProperty: 'metatada',
+        },
+      ),
+    ).toEqual({
       nullable: true,
       additionalProperties: true,
       properties: {
@@ -103,46 +111,50 @@ describe('RFC 8927 support (nullable helper)', () => {
         propertyB: {
           additionalProperties: true,
           properties: {
-            innerPropertyC: { type: 'float64', nullable: true }
-          }
-        }
+            innerPropertyC: { type: 'float64', nullable: true },
+          },
+        },
       },
       optionalProperties: {
-        propertyC: { type: 'string', nullable: true }
+        propertyC: { type: 'string', nullable: true },
       },
       metadata: {
-        metadataProperty: 'metatada'
-      }
+        metadataProperty: 'metatada',
+      },
     })
   })
 
   it('should not create required properties when there are none', () => {
-    expect(object(null, {
-      propertyA: nullable.string(),
-      propertyB: object({
-        innerPropertyC: nullable.float64()
-      })
-    })).toEqual({
+    expect(
+      object(null, {
+        propertyA: nullable.string(),
+        propertyB: object({
+          innerPropertyC: nullable.float64(),
+        }),
+      }),
+    ).toEqual({
       additionalProperties: true,
       optionalProperties: {
         propertyA: { type: 'string', nullable: true },
         propertyB: {
           additionalProperties: true,
           properties: {
-            innerPropertyC: { type: 'float64', nullable: true }
-          }
-        }
-      }
+            innerPropertyC: { type: 'float64', nullable: true },
+          },
+        },
+      },
     })
   })
 
   it('should create nullable objects with no allowed additional properties', () => {
-    expect(nullable.sealed(null, {
-      propertyA: nullable.string(),
-      propertyB: object({
-        innerPropertyC: nullable.float64()
-      })
-    })).toEqual({
+    expect(
+      nullable.sealed(null, {
+        propertyA: nullable.string(),
+        propertyB: object({
+          innerPropertyC: nullable.float64(),
+        }),
+      }),
+    ).toEqual({
       nullable: true,
       additionalProperties: false,
       optionalProperties: {
@@ -150,10 +162,10 @@ describe('RFC 8927 support (nullable helper)', () => {
         propertyB: {
           additionalProperties: true,
           properties: {
-            innerPropertyC: { type: 'float64', nullable: true }
-          }
-        }
-      }
+            innerPropertyC: { type: 'float64', nullable: true },
+          },
+        },
+      },
     })
   })
 })

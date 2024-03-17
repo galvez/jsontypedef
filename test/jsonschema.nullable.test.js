@@ -1,6 +1,5 @@
-import { describe, it, expect } from 'vitest'
-
-const { schema: { nullable } } = require('../index.js')
+import { describe, expect, it } from 'vitest'
+import { nullable } from '../jsonschema.js'
 
 // Test JSON Schema output (JTD-compatible subset)
 
@@ -10,8 +9,8 @@ describe('JSON Schema support', () => {
     expect(nullable.boolean({ title: 'flag' })).toEqual({
       type: ['boolean', 'null'],
       metadata: {
-        title: 'flag'
-      }
+        title: 'flag',
+      },
     })
   })
 
@@ -20,13 +19,16 @@ describe('JSON Schema support', () => {
     expect(nullable.string({ info: 'Information' })).toEqual({
       type: ['string', 'null'],
       metadata: {
-        info: 'Information'
-      }
+        info: 'Information',
+      },
     })
   })
 
   it('should create nullable timestamp types', () => {
-    expect(nullable.timestamp()).toEqual({ type: ['string', 'null'], format: 'date-time' })
+    expect(nullable.timestamp()).toEqual({
+      type: ['string', 'null'],
+      format: 'date-time',
+    })
   })
 
   it('should create nullable number types', () => {
@@ -45,20 +47,28 @@ describe('JSON Schema support', () => {
   })
 
   it('should create nullable enum types', () => {
-    expect(nullable.values(['A', 'B', 'C'])).toEqual({ type: ['string', 'null'], enum: ['A', 'B', 'C'] })
+    expect(nullable.values(['A', 'B', 'C'])).toEqual({
+      type: ['string', 'null'],
+      enum: ['A', 'B', 'C'],
+    })
   })
 
   it('should create nullable elements form (arrays)', () => {
-    expect(nullable.array(nullable.string())).toEqual({ type: ['array', 'null'], items: { type: ['string', 'null'] } })
+    expect(nullable.array(nullable.string())).toEqual({
+      type: ['array', 'null'],
+      items: { type: ['string', 'null'] },
+    })
   })
 
   it('should create nullable properties form (objects)', () => {
-    expect(nullable.object({
-      propertyA: nullable.string(),
-      propertyB: nullable.object({
-        innerPropertyC: nullable.float64()
-      })
-    })).toEqual({
+    expect(
+      nullable.object({
+        propertyA: nullable.string(),
+        propertyB: nullable.object({
+          innerPropertyC: nullable.float64(),
+        }),
+      }),
+    ).toEqual({
       additionalProperties: true,
       type: ['object', 'null'],
       properties: {
@@ -67,26 +77,32 @@ describe('JSON Schema support', () => {
           type: ['object', 'null'],
           additionalProperties: true,
           properties: {
-            innerPropertyC: { type: ['number', 'null'] }
+            innerPropertyC: { type: ['number', 'null'] },
           },
-          required: ['innerPropertyC']
-        }
+          required: ['innerPropertyC'],
+        },
       },
-      required: ['propertyA', 'propertyB']
+      required: ['propertyA', 'propertyB'],
     })
   })
 
   it('should create nullable optional properties', () => {
-    expect(nullable.object({
-      propertyA: nullable.string(),
-      propertyB: nullable.object({
-        innerPropertyC: nullable.float64()
-      })
-    }, {
-      propertyC: { type: ['string', 'null'] }
-    }, {
-      metadataProperty: 'metatada'
-    })).toEqual({
+    expect(
+      nullable.object(
+        {
+          propertyA: nullable.string(),
+          propertyB: nullable.object({
+            innerPropertyC: nullable.float64(),
+          }),
+        },
+        {
+          propertyC: { type: ['string', 'null'] },
+        },
+        {
+          metadataProperty: 'metatada',
+        },
+      ),
+    ).toEqual({
       type: ['object', 'null'],
       additionalProperties: true,
       properties: {
@@ -95,26 +111,28 @@ describe('JSON Schema support', () => {
           type: ['object', 'null'],
           additionalProperties: true,
           properties: {
-            innerPropertyC: { type: ['number', 'null'] }
+            innerPropertyC: { type: ['number', 'null'] },
           },
-          required: ['innerPropertyC']
+          required: ['innerPropertyC'],
         },
-        propertyC: { type: ['string', 'null'] }
+        propertyC: { type: ['string', 'null'] },
       },
       required: ['propertyA', 'propertyB'],
       metadata: {
-        metadataProperty: 'metatada'
-      }
+        metadataProperty: 'metatada',
+      },
     })
   })
 
   it('should not create required properties when there are none', () => {
-    expect(nullable.object(null, {
-      propertyA: nullable.string(),
-      propertyB: nullable.object({
-        innerPropertyC: nullable.float64()
-      })
-    })).toEqual({
+    expect(
+      nullable.object(null, {
+        propertyA: nullable.string(),
+        propertyB: nullable.object({
+          innerPropertyC: nullable.float64(),
+        }),
+      }),
+    ).toEqual({
       type: ['object', 'null'],
       additionalProperties: true,
       properties: {
@@ -123,21 +141,23 @@ describe('JSON Schema support', () => {
           type: ['object', 'null'],
           additionalProperties: true,
           properties: {
-            innerPropertyC: { type: ['number', 'null'] }
+            innerPropertyC: { type: ['number', 'null'] },
           },
-          required: ['innerPropertyC']
-        }
-      }
+          required: ['innerPropertyC'],
+        },
+      },
     })
   })
 
   it('should create nullable objects with no allowed additional properties', () => {
-    expect(nullable.sealed(null, {
-      propertyA: nullable.string(),
-      propertyB: nullable.object({
-        innerPropertyC: nullable.float64()
-      })
-    })).toEqual({
+    expect(
+      nullable.sealed(null, {
+        propertyA: nullable.string(),
+        propertyB: nullable.object({
+          innerPropertyC: nullable.float64(),
+        }),
+      }),
+    ).toEqual({
       type: ['object', 'null'],
       additionalProperties: false,
       properties: {
@@ -146,11 +166,11 @@ describe('JSON Schema support', () => {
           type: ['object', 'null'],
           additionalProperties: true,
           properties: {
-            innerPropertyC: { type: ['number', 'null'] }
+            innerPropertyC: { type: ['number', 'null'] },
           },
-          required: ['innerPropertyC']
-        }
-      }
+          required: ['innerPropertyC'],
+        },
+      },
     })
   })
 })

@@ -1,27 +1,27 @@
-import { describe, it, expect } from 'vitest'
+import { describe, expect, it } from 'vitest'
 
-const {
+import {
+  array,
+  boolean,
   // Types
   empty,
-  boolean,
-  number, // Alias to float64 for convenience
-  integer, // Alias to float64 for convenience
-  string,
-  timestamp,
   float32,
   float64,
   int8,
-  uint8,
   int16,
-  uint16,
   int32,
-  uint32,
-  values, // Alias to enum because that's a reserved keyword
-  array,
+  integer, // Alias to float64 for convenience
+  match, // Helper to define both `discriminator` and `mapping``
+  number, // Alias to float64 for convenience
   object, // Object with additional properties allowed
   sealed, // Object with no additional properties allowed
-  match // Helper to define both `discriminator` and `mapping``
-} = require('../index.js')
+  string,
+  timestamp,
+  uint8,
+  uint16,
+  uint32,
+  values, // Alias to enum because that's a reserved keyword
+} from '../index.js'
 
 // Test regular JSON Type Definition output
 describe('RFC 8927 support', () => {
@@ -34,8 +34,8 @@ describe('RFC 8927 support', () => {
     expect(boolean({ title: 'flag' })).toEqual({
       type: 'boolean',
       metadata: {
-        title: 'flag'
-      }
+        title: 'flag',
+      },
     })
   })
 
@@ -44,8 +44,8 @@ describe('RFC 8927 support', () => {
     expect(string({ info: 'Information' })).toEqual({
       type: 'string',
       metadata: {
-        info: 'Information'
-      }
+        info: 'Information',
+      },
     })
   })
 
@@ -77,116 +77,130 @@ describe('RFC 8927 support', () => {
   })
 
   it('should create properties form (objects)', () => {
-    expect(object({
-      propertyA: string(),
-      propertyB: object({
-        innerPropertyC: float64()
-      })
-    })).toEqual({
+    expect(
+      object({
+        propertyA: string(),
+        propertyB: object({
+          innerPropertyC: float64(),
+        }),
+      }),
+    ).toEqual({
       additionalProperties: true,
       properties: {
         propertyA: { type: 'string' },
         propertyB: {
           additionalProperties: true,
           properties: {
-            innerPropertyC: { type: 'float64' }
-          }
-        }
-      }
+            innerPropertyC: { type: 'float64' },
+          },
+        },
+      },
     })
   })
 
   it('should create optional properties', () => {
-    expect(object({
-      propertyA: string(),
-      propertyB: object({
-        innerPropertyC: float64()
-      })
-    }, {
-      propertyC: { type: 'string' }
-    }, {
-      metadataProperty: 'metatada'
-    })).toEqual({
+    expect(
+      object(
+        {
+          propertyA: string(),
+          propertyB: object({
+            innerPropertyC: float64(),
+          }),
+        },
+        {
+          propertyC: { type: 'string' },
+        },
+        {
+          metadataProperty: 'metatada',
+        },
+      ),
+    ).toEqual({
       additionalProperties: true,
       properties: {
         propertyA: { type: 'string' },
         propertyB: {
           additionalProperties: true,
           properties: {
-            innerPropertyC: { type: 'float64' }
-          }
-        }
+            innerPropertyC: { type: 'float64' },
+          },
+        },
       },
       optionalProperties: {
-        propertyC: { type: 'string' }
+        propertyC: { type: 'string' },
       },
       metadata: {
-        metadataProperty: 'metatada'
-      }
+        metadataProperty: 'metatada',
+      },
     })
   })
 
   it('should not create required properties when there are none', () => {
-    expect(object(null, {
-      propertyA: string(),
-      propertyB: object({
-        innerPropertyC: float64()
-      })
-    })).toEqual({
+    expect(
+      object(null, {
+        propertyA: string(),
+        propertyB: object({
+          innerPropertyC: float64(),
+        }),
+      }),
+    ).toEqual({
       additionalProperties: true,
       optionalProperties: {
         propertyA: { type: 'string' },
         propertyB: {
           additionalProperties: true,
           properties: {
-            innerPropertyC: { type: 'float64' }
-          }
-        }
-      }
+            innerPropertyC: { type: 'float64' },
+          },
+        },
+      },
     })
   })
 
   it('should create objects with no allowed additional properties', () => {
-    expect(sealed(null, {
-      propertyA: string(),
-      propertyB: object({
-        innerPropertyC: float64()
-      })
-    })).toEqual({
+    expect(
+      sealed(null, {
+        propertyA: string(),
+        propertyB: object({
+          innerPropertyC: float64(),
+        }),
+      }),
+    ).toEqual({
       additionalProperties: false,
       optionalProperties: {
         propertyA: { type: 'string' },
         propertyB: {
           additionalProperties: true,
           properties: {
-            innerPropertyC: { type: 'float64' }
-          }
-        }
-      }
+            innerPropertyC: { type: 'float64' },
+          },
+        },
+      },
     })
   })
 
   it('should create discriminator form (tagged unions)', () => {
-    expect(match('event', {
-      created: sealed({ when: timestamp() }),
-      added: sealed({ when: timestamp(), what: string() })
-    })).toEqual({
+    expect(
+      match('event', {
+        created: sealed({ when: timestamp() }),
+        added: sealed({ when: timestamp(), what: string() }),
+      }),
+    ).toEqual({
       discriminator: 'event',
       mapping: {
         created: {
           additionalProperties: false,
           properties: {
-            when: { type: 'timestamp' }
-          }
+            when: { type: 'timestamp' },
+          },
         },
         added: {
           additionalProperties: false,
           properties: {
             when: { type: 'timestamp' },
-            what: { type: 'string' }
-          }
-        }
-      }
+            what: { type: 'string' },
+          },
+        },
+      },
     })
   })
 })
