@@ -1,5 +1,4 @@
 {
-  "files": ["index.js", "jsonschema.js"],
   "exports": {
     ".": "./index.js",
     "./jsonschema": "./jsonschema.js"
@@ -14,7 +13,7 @@
   "bundleDependencies": false,
   "deprecated": false,
   "description": "Syntactic sugar for creating JSON Type Definition (JTD/RFC8927) schemas, and generating compatible JSON Schema from JTD schemas",
-  "files": ["index.js", "example", "README.md"],
+  "files": ["index.js", "jsonschema.js"],
   "homepage": "https://github.com/galvez/jsontypedef",
   "license": "MIT",
   "main": "index.js",
@@ -24,7 +23,7 @@
     "type": "git",
     "url": "git+https://github.com/galvez/jsontypedef.git"
   },
-  "version": "2.0.0",
+  "version": "2.0.1",
   "devDependencies": {
     "vitest": "^0.33.0",
     "@biomejs/biome": "^1.6.1"
